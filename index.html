@@ -1,440 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viewer</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        body {
-            background: #07090e;
-            color: #f5f7fb;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        .browser {
-            width: 100%;
-            height: 100vh;
-
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* TOP BAR */
-
-        .topbar {
-            height: 64px;
-            flex-shrink: 0;
-
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            padding: 0 14px;
-
-            background: #0d1119;
-
-            border-bottom: 1px solid
-                rgba(255,255,255,.08);
-        }
-
-        /* BUTTONS */
-
-        .nav-btn {
-            width: 38px;
-            height: 38px;
-
-            flex-shrink: 0;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border: 1px solid
-                rgba(255,255,255,.08);
-
-            border-radius: 9px;
-
-            background: #151b26;
-            color: #a9b2c1;
-
-            font-size: 17px;
-
-            cursor: pointer;
-
-            transition: .15s;
-        }
-
-        .nav-btn:hover {
-            background: #1c2432;
-            color: white;
-        }
-
-        /* URL BAR */
-
-        .address {
-            height: 40px;
-
-            flex: 1;
-
-            display: flex;
-            align-items: center;
-
-            background: #070a10;
-
-            border: 1px solid
-                rgba(255,255,255,.09);
-
-            border-radius: 10px;
-
-            overflow: hidden;
-        }
-
-        .lock {
-            padding-left: 14px;
-
-            color: #697386;
-
-            font-size: 12px;
-        }
-
-        #url {
-            width: 100%;
-            height: 100%;
-
-            padding: 0 12px;
-
-            border: none;
-            outline: none;
-
-            background: transparent;
-            color: #e8ebf0;
-
-            font-size: 13px;
-        }
-
-        #url::placeholder {
-            color: #555f70;
-        }
-
-        /* GO BUTTON */
-
-        .go {
-            height: 38px;
-
-            padding: 0 18px;
-
-            border: none;
-            border-radius: 9px;
-
-            background: #4d8cff;
-            color: white;
-
-            font-size: 12px;
-            font-weight: 700;
-
-            cursor: pointer;
-
-            transition: .15s;
-        }
-
-        .go:hover {
-            background: #669cff;
-        }
-
-        /* VIEW */
-
-        .view {
-            position: relative;
-
-            flex: 1;
-
-            background: #05070a;
-        }
-
-        #viewer {
-            width: 100%;
-            height: 100%;
-
-            display: none;
-
-            border: none;
-
-            background: white;
-        }
-
-        /* HOME SCREEN */
-
-        #home {
-            position: absolute;
-            inset: 0;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background:
-                radial-gradient(
-                    circle at 50% 30%,
-                    rgba(77,140,255,.12),
-                    transparent 35%
-                ),
-                #07090e;
-        }
-
-        .home-content {
-            width: min(520px, 90%);
-
-            text-align: center;
-        }
-
-        .logo {
-            width: 58px;
-            height: 58px;
-
-            margin: 0 auto 20px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 15px;
-
-            background: linear-gradient(
-                135deg,
-                #3979ee,
-                #6ca4ff
-            );
-
-            box-shadow:
-                0 15px 45px
-                rgba(77,140,255,.25);
-
-            font-size: 22px;
-            font-weight: 800;
-        }
-
-        h1 {
-            font-size: 36px;
-
-            letter-spacing: -1.5px;
-        }
-
-        .description {
-            margin-top: 10px;
-
-            color: #7f8999;
-
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .home-search {
-            height: 48px;
-
-            margin-top: 28px;
-
-            display: flex;
-
-            background: #0c1119;
-
-            border: 1px solid
-                rgba(255,255,255,.09);
-
-            border-radius: 12px;
-
-            overflow: hidden;
-        }
-
-        #homeUrl {
-            flex: 1;
-
-            padding: 0 16px;
-
-            background: transparent;
-            color: white;
-
-            border: none;
-            outline: none;
-
-            font-size: 13px;
-        }
-
-        .home-go {
-            margin: 5px;
-
-            padding: 0 18px;
-
-            border: none;
-            border-radius: 8px;
-
-            background: #4d8cff;
-            color: white;
-
-            font-weight: 700;
-
-            cursor: pointer;
-        }
-
-        /* NOTICE */
-
-        .notice {
-            margin-top: 18px;
-
-            color: #505b6b;
-
-            font-size: 10px;
-            line-height: 1.5;
-        }
-
-        @media(max-width: 600px) {
-            .topbar {
-                padding: 0 8px;
-                gap: 6px;
-            }
-
-            .nav-btn {
-                width: 34px;
-            }
-
-            .go {
-                padding: 0 12px;
-            }
-
-            h1 {
-                font-size: 29px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="browser">
-
-    <div class="topbar">
-
-        <button
-            class="nav-btn"
-            onclick="goHome()"
-            title="Home">
-            ⌂
-        </button>
-
-        <button
-            class="nav-btn"
-            onclick="reloadPage()"
-            title="Reload">
-            ↻
-        </button>
-
-        <div class="address">
-
-            <span class="lock">◇</span>
-
-            <input
-                id="url"
-                type="text"
-                placeholder="Enter a website URL"
-                autocomplete="off"
-                spellcheck="false">
-
-        </div>
-
-        <button
-            class="go"
-            onclick="navigate()">
-            GO
-        </button>
-
-    </div>
-
-
-    <div class="view">
-
-        <div id="home">
-
-            <div class="home-content">
-
-                <div class="logo">
-                    V
-                </div>
-
-                <h1>Viewer</h1>
-
-                <p class="description">
-                    Enter a website to open it
-                    directly inside Viewer.
-                </p>
-
-                <div class="home-search">
-
-                    <input
-                        id="homeUrl"
-                        type="text"
-                        placeholder="https://example.com"
-                        autocomplete="off"
-                        spellcheck="false">
-
-                    <button
-                        class="home-go"
-                        onclick="navigateHome()">
-                        OPEN
-                    </button>
-
-                </div>
-
-                <p class="notice">
-                    Websites can choose whether they
-                    allow themselves to be embedded.
-                    Some sites will refuse to display.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <iframe
-            id="viewer"
-            referrerpolicy="strict-origin-when-cross-origin">
-        </iframe>
-
-    </div>
-
-</div>
-
-
 <script>
-
-const viewer =
-    document.getElementById("viewer");
-
-const home =
-    document.getElementById("home");
-
-const urlInput =
-    document.getElementById("url");
-
-const homeInput =
-    document.getElementById("homeUrl");
-
+const viewer = document.getElementById("viewer");
+const home = document.getElementById("home");
+const urlInput = document.getElementById("url");
+const homeInput = document.getElementById("homeUrl");
 
 function cleanURL(value) {
-
     value = value.trim();
 
     if (!value) {
@@ -449,9 +19,7 @@ function cleanURL(value) {
     }
 
     try {
-
-        const parsed =
-            new URL(value);
+        const parsed = new URL(value);
 
         if (
             parsed.protocol !== "http:" &&
@@ -460,113 +28,222 @@ function cleanURL(value) {
             return null;
         }
 
-        return parsed.href;
-
+        return parsed;
     } catch {
-
         return null;
-
     }
 }
 
+
+/* --------------------------------
+   TWITCH
+-------------------------------- */
+
+function getTwitchEmbed(parsed) {
+    const host = parsed.hostname
+        .replace("www.", "")
+        .toLowerCase();
+
+    if (host !== "twitch.tv") {
+        return null;
+    }
+
+    const parts = parsed.pathname
+        .split("/")
+        .filter(Boolean);
+
+    if (parts.length === 0) {
+        return null;
+    }
+
+    const channel = parts[0];
+
+    const reserved = [
+        "directory",
+        "downloads",
+        "jobs",
+        "turbo",
+        "settings",
+        "subscriptions",
+        "wallet"
+    ];
+
+    if (reserved.includes(channel.toLowerCase())) {
+        return null;
+    }
+
+    const parent = window.location.hostname;
+
+    return (
+        "https://player.twitch.tv/?" +
+        "channel=" +
+        encodeURIComponent(channel) +
+        "&parent=" +
+        encodeURIComponent(parent) +
+        "&autoplay=false"
+    );
+}
+
+
+/* --------------------------------
+   YOUTUBE
+-------------------------------- */
+
+function getYouTubeEmbed(parsed) {
+    const host = parsed.hostname
+        .replace("www.", "")
+        .toLowerCase();
+
+    let videoID = null;
+
+    if (host === "youtu.be") {
+        videoID = parsed.pathname
+            .split("/")
+            .filter(Boolean)[0];
+    }
+
+    if (
+        host === "youtube.com" ||
+        host === "m.youtube.com"
+    ) {
+        if (parsed.pathname === "/watch") {
+            videoID = parsed.searchParams.get("v");
+        }
+
+        if (parsed.pathname.startsWith("/shorts/")) {
+            videoID = parsed.pathname.split("/")[2];
+        }
+
+        if (parsed.pathname.startsWith("/embed/")) {
+            videoID = parsed.pathname.split("/")[2];
+        }
+    }
+
+    if (!videoID) {
+        return null;
+    }
+
+    return (
+        "https://www.youtube.com/embed/" +
+        encodeURIComponent(videoID)
+    );
+}
+
+
+/* --------------------------------
+   DETECT SUPPORTED EMBEDS
+-------------------------------- */
+
+function getEmbedURL(parsed) {
+    const twitch = getTwitchEmbed(parsed);
+
+    if (twitch) {
+        return {
+            url: twitch,
+            type: "Twitch"
+        };
+    }
+
+    const youtube = getYouTubeEmbed(parsed);
+
+    if (youtube) {
+        return {
+            url: youtube,
+            type: "YouTube"
+        };
+    }
+
+    return {
+        url: parsed.href,
+        type: "Website"
+    };
+}
+
+
+/* --------------------------------
+   OPEN URL
+-------------------------------- */
 
 function openURL(value) {
+    const parsed = cleanURL(value);
 
-    const finalURL =
-        cleanURL(value);
-
-    if (!finalURL) {
+    if (!parsed) {
+        urlInput.value = "";
+        urlInput.placeholder = "Invalid URL";
         return;
     }
 
-    urlInput.value =
-        finalURL;
+    const result = getEmbedURL(parsed);
 
-    home.style.display =
-        "none";
+    /* Keep original URL visible */
+    urlInput.value = parsed.href;
 
-    viewer.style.display =
-        "block";
+    home.style.display = "none";
+    viewer.style.display = "block";
 
-    viewer.src =
-        finalURL;
+    viewer.src = result.url;
 }
 
+
+/* --------------------------------
+   NAVIGATION
+-------------------------------- */
 
 function navigate() {
-
-    openURL(
-        urlInput.value
-    );
-
+    openURL(urlInput.value);
 }
-
 
 function navigateHome() {
-
-    openURL(
-        homeInput.value
-    );
-
+    openURL(homeInput.value);
 }
-
 
 function goHome() {
+    viewer.src = "about:blank";
 
-    viewer.src =
-        "about:blank";
+    viewer.style.display = "none";
+    home.style.display = "flex";
 
-    viewer.style.display =
-        "none";
-
-    home.style.display =
-        "flex";
-
-    urlInput.value =
-        "";
-
+    urlInput.value = "";
+    homeInput.value = "";
 }
 
-
 function reloadPage() {
-
-    if (!viewer.src) {
+    if (
+        !viewer.src ||
+        viewer.src === "about:blank"
+    ) {
         return;
     }
 
-    const current =
-        viewer.src;
+    const current = viewer.src;
 
-    viewer.src =
-        current;
+    viewer.src = "about:blank";
 
+    setTimeout(() => {
+        viewer.src = current;
+    }, 50);
 }
 
+
+/* --------------------------------
+   ENTER KEY
+-------------------------------- */
 
 urlInput.addEventListener(
     "keydown",
     function(event) {
-
         if (event.key === "Enter") {
             navigate();
         }
-
     }
 );
-
 
 homeInput.addEventListener(
     "keydown",
     function(event) {
-
         if (event.key === "Enter") {
             navigateHome();
         }
-
     }
 );
-
 </script>
-
-</body>
-</html>
